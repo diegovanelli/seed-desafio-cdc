@@ -9,24 +9,28 @@ import { Model } from 'mongoose';
 export class AutorService {
   constructor(@InjectModel(Autor.name) private autorModel: Model<Autor>) {}
 
-  create(createAutorDto: CreateAutorDto): Promise<Autor> {
+  async create(createAutorDto: CreateAutorDto): Promise<Autor> {
     const autorCriado = new this.autorModel(createAutorDto);
-    return autorCriado.save();
+    return await autorCriado.save();
   }
 
-  findAll() {
-    return `This action returns all autor`;
+  async findAll(): Promise<Autor[]> {
+    return this.autorModel.find().exec();
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} autor`;
   }
 
-  update(id: number, updateAutorDto: UpdateAutorDto) {
+  async update(id: string, updateAutorDto: UpdateAutorDto) {
+    console.info(updateAutorDto);
+    const autorAlterado = new this.autorModel(updateAutorDto);
+    await autorAlterado.updateOne({ _id: id });
     return `This action updates a #${id} autor`;
   }
 
-  remove(id: number) {
+  async remove(id: string) {
+    console.info(await this.autorModel.deleteOne({ _id: id }));
     return `This action removes a #${id} autor`;
   }
 }

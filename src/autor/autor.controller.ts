@@ -27,16 +27,16 @@ export class AutorController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.autorService.findOne(+id);
+    return this.autorService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAutorDto: UpdateAutorDto) {
-    return this.autorService.update(+id, updateAutorDto);
+    return this.autorService.update(id, updateAutorDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.autorService.remove(+id);
+    return this.autorService.remove(id);
   }
 }
