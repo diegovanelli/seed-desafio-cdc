@@ -25,12 +25,10 @@ export class Autor {
   email: string;
 
   @Prop()
-  @Max(400, {
-    message: 'A descricao é no máximo 400 caracteres.',
-  })
   @IsNotEmpty({
     message: 'Descricao é obrigatório.',
   })
+  @Max(400)
   descricao: string;
 
   @Prop({ default: Date.now })
