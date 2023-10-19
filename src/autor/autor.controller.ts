@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { AutorService } from './autor.service';
 import { CreateAutorDto } from './dto/create-autor.dto';
@@ -16,6 +17,7 @@ export class AutorController {
   constructor(private readonly autorService: AutorService) {}
 
   @Post()
+  @HttpCode(201)
   create(@Body() createAutorDto: CreateAutorDto) {
     return this.autorService.create(createAutorDto);
   }
@@ -31,12 +33,14 @@ export class AutorController {
   }
 
   @Patch(':id')
+  @HttpCode(204)
   update(@Param('id') id: string, @Body() updateAutorDto: UpdateAutorDto) {
-    return this.autorService.update(id, updateAutorDto);
+    this.autorService.update(id, updateAutorDto);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.autorService.remove(id);
+    this.autorService.remove(id);
   }
 }
