@@ -4,14 +4,22 @@ import { UpdateAutorDto } from './dto/update-autor.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Autor } from 'src/schemas/autor.schema';
 import { Model } from 'mongoose';
+import { MongoErrorHandlerService } from 'src/exceptions/MongoErrorHandlerService';
 
 @Injectable()
 export class AutorService {
-  constructor(@InjectModel(Autor.name) private autorModel: Model<Autor>) {}
+  constructor(
+    @InjectModel(Autor.name) private autorModel: Model<Autor>,
+    private readonly mongoErrorHandlerService: MongoErrorHandlerService,
+  ) {}
 
   async create(createAutorDto: CreateAutorDto): Promise<Autor> {
-    const autorCriado = new this.autorModel(createAutorDto);
-    return await autorCriado.save();
+    try {
+      const autorCriado = new this.autorModel(createAutorDto);
+      return await autorCriado.save();
+    } catch (error) {
+      this.mongoErrorHandlerService.handleMongoError(error);
+    }
   }
 
   async findAll(): Promise<Autor[]> {

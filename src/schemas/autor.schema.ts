@@ -12,7 +12,7 @@ export class Autor {
   })
   nome: string;
 
-  @Prop()
+  @Prop({ unique: true })
   @IsEmail(
     {},
     {
