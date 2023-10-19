@@ -19,6 +19,9 @@ export class Autor {
       message: 'Email precisa ser um endereço de email válido.',
     },
   )
+  @IsNotEmpty({
+    message: 'Email é obrigatório.',
+  })
   email: string;
 
   @Prop()
