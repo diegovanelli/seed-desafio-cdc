@@ -28,6 +28,9 @@ export class Autor {
   @Max(400, {
     message: 'A descricao é no máximo 400 caracteres.',
   })
+  @IsNotEmpty({
+    message: 'Descricao é obrigatório.',
+  })
   descricao: string;
 
   @Prop({ default: Date.now })
