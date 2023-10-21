@@ -2,23 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { CreateAutorDto } from './dto/create-autor.dto';
 import { UpdateAutorDto } from './dto/update-autor.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Autor } from 'src/schemas/autor.schema';
+import { Autor } from 'src/autor/schemas/autor.schema';
 import { Model } from 'mongoose';
-import { MongoErrorHandlerService } from 'src/exceptions/MongoErrorHandlerService';
+import { UniqueConstraintException } from 'src/exceptions/UniqueConstraint.exception';
 
 @Injectable()
 export class AutorService {
-  constructor(
-    @InjectModel(Autor.name) private autorModel: Model<Autor>,
-    private readonly mongoErrorHandlerService: MongoErrorHandlerService,
-  ) {}
+  constructor(@InjectModel(Autor.name) private autorModel: Model<Autor>) {}
 
   async create(createAutorDto: CreateAutorDto): Promise<Autor> {
     try {
       const autorCriado = new this.autorModel(createAutorDto);
       return await autorCriado.save();
     } catch (error) {
-      this.mongoErrorHandlerService.handleMongoError(error);
+      if (error.code === 11000) {
+        throw new UniqueConstraintException('email', createAutorDto.email);
+      } else {
+        console.error('Erro do MongoDB:', error.message);
+      }
     }
   }
 
@@ -27,7 +28,7 @@ export class AutorService {
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} autor`;
+    return this.autorModel.findById(id).exec();
   }
 
   async update(id: string, updateAutorDto: UpdateAutorDto) {
@@ -38,7 +39,7 @@ export class AutorService {
   }
 
   async remove(id: string) {
-    console.info(await this.autorModel.deleteOne({ _id: id }));
+    await this.autorModel.deleteOne({ _id: id });
     return `This action removes a #${id} autor`;
   }
 }

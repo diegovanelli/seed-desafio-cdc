@@ -1,34 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsEmail, IsNotEmpty, Max } from 'class-validator';
 import { HydratedDocument } from 'mongoose';
 
 export type AutorDodument = HydratedDocument<Autor>;
 
 @Schema()
 export class Autor {
-  @Prop()
-  @IsNotEmpty({
-    message: 'Nome é obrigatório.',
-  })
+  @Prop({ required: true })
   nome: string;
 
   @Prop({ unique: true })
-  @IsEmail(
-    {},
-    {
-      message: 'Email precisa ser um endereço de email válido.',
-    },
-  )
-  @IsNotEmpty({
-    message: 'Email é obrigatório.',
-  })
   email: string;
 
-  @Prop()
-  @IsNotEmpty({
-    message: 'Descricao é obrigatório.',
-  })
-  @Max(400)
+  @Prop({ required: true })
   descricao: string;
 
   @Prop({ default: Date.now })
