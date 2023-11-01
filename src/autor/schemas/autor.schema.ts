@@ -11,7 +11,10 @@ export class Autor {
   @Prop({ unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    maxlength: 400,
+  })
   descricao: string;
 
   @Prop({ default: Date.now })
