@@ -1,14 +1,18 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CategoriaService } from './categoria.service';
-import { CreateCategoriaDto } from './dto/create-categoria.dto';
+import { Categoria } from './schemas/categoria.schema';
 
 @Controller('categoria')
 export class CategoriaController {
   constructor(private readonly categoriaService: CategoriaService) {}
 
   @Post()
-  @HttpCode(201)
-  create(@Body() createCategoriaDto: CreateCategoriaDto) {
-    return this.categoriaService.create(createCategoriaDto);
+  create(@Body() categoria: Categoria) {
+    return this.categoriaService.create(categoria);
+  }
+
+  @Get()
+  async findAll(): Promise<Categoria[]> {
+    return this.categoriaService.findAll();
   }
 }
