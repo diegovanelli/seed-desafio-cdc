@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { CategoriaService } from './categoria.service';
 import { Categoria } from './schemas/categoria.schema';
 
@@ -7,6 +7,7 @@ export class CategoriaController {
   constructor(private readonly categoriaService: CategoriaService) {}
 
   @Post()
+  @HttpCode(201)
   create(@Body() categoria: Categoria) {
     return this.categoriaService.create(categoria);
   }
